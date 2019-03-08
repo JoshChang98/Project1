@@ -51,28 +51,6 @@ D = zeros(n);
        D(i,i) = sumsqr(resid(:,i)) / denom; 
     end
 
-%%%%%%%%%%%%%%%%%%%Remove following block of code
-% % Calculate the residuals
-% 
-% for i = 1:n
-%     for t = 1:N
-%         epsilon(t,i) = (returns(t,i)) - (alpha(i) + betaCF(i)*(expExFactRet(1))); 
-%     end
-%    end
-% % Calculate the residual variance with "N - p - 1" degrees of freedom
-% denom = N -2;
-% sigmaEp = zeros(n,1);
-% for i = 1:n
-%     sum = 0;
-%     for t = 1:N
-%        sum = sum + (epsilon(t,i))^2; 
-%     end
-%     variance = sum/denom;
-%     sigmaEp(i,1) = variance;
-% end
-% D = diag(sigmaEp);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % Calculate the asset expected excess returns, mu
  mu = transpose(alpha) + betaCF*(expExFactRet(1));
 
