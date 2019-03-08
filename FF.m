@@ -48,33 +48,6 @@ end
 sum_Beta_x_Fact = sum(Beta_x_Fact,1);
 mu = transpose(alpha) + transpose(sum_Beta_x_Fact);
 
-% %%%%%%%%%%%%%%%%%%%Remove following secton of code
-
-% %Calculate the epsilon for each asset
-% epsilon = zeros(size(returns,1),size(returns,2));
-% for i = 1:n
-%     
-%         epsilon(:,i) = returns(:,i) - (temp(1,n) + sum_Beta_x_Fact(i));
-%     
-% end
-% 
-% denom = N -nFactCols-1;
-% sigmaEp = zeros(n,1);
-% for i = 1:n
-%     res = 0;
-%     for t = 1:N
-%        res = res + (epsilon(t,i))^2; 
-%     end
-%     variance = res/denom;
-%     sigmaEp(i,1) = variance;
-% end 
-% % Calculate the asset expected excess returns, mu
-% mu = transpose(alpha) + transpose(sum_Beta_x_Fact);
-% % Calculate the diagonal matrix of residuals and the asset covariance 
-% % matrix
-% D = diag(sigmaEp);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 %Calculating the factor covariance matrix
 F = cov(factRet);
