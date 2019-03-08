@@ -17,7 +17,7 @@ sigmaF = var(factRet);
 % The function regress(y,X) requires a response vector y and a predictor
 % matrix X. The matrix X must include a column of ones to account for the
 % intercept alpha.
- X = [ones(N,1) factRet(:,1)];
+ X = [ones(N,1),factRet(:,1)];
 %Use the closed-form (CF) solution to find the collection of alphas 
 % and betas for all assets
 temp = inv(transpose(X)* X)*transpose(X)*returns;
@@ -37,34 +37,49 @@ temp = inv(transpose(X)* X)*transpose(X)*returns;
 % - factor variance
 % - residual variance (i.e., idiosyncratic risk)
 
-% Calculate the residuals
+%Calculating temp2: matrix of intercepts(alpha) and factor loading (beta)
+%multiplied by factor
+temp2 = X*temp;
 
-for i = 1:n
-    for t = 1:N
-        epsilon(t,i) = (returns(t,i)) - (alpha(i) + betaCF(i)*(expExFactRet(1))); 
-    end
-   end
-% Calculate the residual variance with "N - p - 1" degrees of freedom
-denom = N -2;
-sigmaEp = zeros(n,1);
-for i = 1:n
-    sum = 0;
-    for t = 1:N
-       sum = sum + (epsilon(t,i))^2; 
-    end
-    variance = sum/denom;
-    sigmaEp(i,1) = variance;
-end
+%Calculating matrix of residuals:
+resid = returns - temp2;
 
+%Calculating D matrix:
+denom = N-2;
+D = zeros(n);
+    for i = 1:n
+       D(i,i) = sumsqr(resid(:,i)) / denom; 
+    end
+
+%%%%%%%%%%%%%%%%%%%Remove following block of code
+% % Calculate the residuals
+% 
+% for i = 1:n
+%     for t = 1:N
+%         epsilon(t,i) = (returns(t,i)) - (alpha(i) + betaCF(i)*(expExFactRet(1))); 
+%     end
+%    end
+% % Calculate the residual variance with "N - p - 1" degrees of freedom
+% denom = N -2;
+% sigmaEp = zeros(n,1);
+% for i = 1:n
+%     sum = 0;
+%     for t = 1:N
+%        sum = sum + (epsilon(t,i))^2; 
+%     end
+%     variance = sum/denom;
+%     sigmaEp(i,1) = variance;
+% end
+% D = diag(sigmaEp);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Calculate the asset expected excess returns, mu
  mu = transpose(alpha) + betaCF*(expExFactRet(1));
 
-% Calculate the diagonal matrix of residuals and the asset covariance 
-% matrix
-D = diag(sigmaEp);
+% Calculate asset covariance matrix
+
 temp =factRet(:,1);
- Q = var(temp)*betaCF *transpose(betaCF) + D;
+ Q = betaCF*cov(temp)*transpose(betaCF) + D;
 
    
 end
