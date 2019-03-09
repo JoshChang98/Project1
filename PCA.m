@@ -21,15 +21,19 @@ function  [mu, Q] = PCA(returns, varargin)
     
     D=diag(sort(diag(D),'descend')); % make diagonal matrix out of sorted diagonal values of input D
     [c, ind]=sort(diag(D),'descend'); % store the indices of which columns the sorted eigenvalues come from
-    V = V(:,ind); 
-    
-    
+    V = V(:,ind);
+    V
+   
+    prime = pca(returns)
+     diff = flip(V,2) - prime
     V_inv = inv(V);
     for r = 1:m
       for c = 1:K
         f(r, c) =returns(r, :)*V_inv(:, c);
       end
     end
+    csvwrite('PCAOutput.csv',V);
+    csvwrite('MatlabPCAOutput.csv',prime);
     [mu, Q] = FF(returns, f);
 
     %----------------------------------------------------------------------
