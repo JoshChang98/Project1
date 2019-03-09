@@ -47,9 +47,7 @@ for i = 1:nFactCols
 end
 sum_Beta_x_Fact = sum(Beta_x_Fact,1);
 mu = transpose(alpha) + transpose(sum_Beta_x_Fact)
-%temp2
-temp3 = geomean(temp2+1,1)-1;
-mu_2 = transpose(temp3)
+
 %Calculating the factor covariance matrix
 F = cov(factRet);
 %Calculating the asset covariance matrix
